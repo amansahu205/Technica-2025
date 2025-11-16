@@ -1,54 +1,61 @@
 /**
  * Cloudflare Pages Function: Market Ticker API
  *
- * Proxies requests to Python backend for real-time ticker data
+ * Returns mock real-time ticker data for demo
  * GET /api/market-ticker
  */
 
-interface Env {
-  BACKEND_URL?: string
+interface MarketTickerData {
+  symbol: string
+  price: number
+  change: number
+  changePercent: number
 }
 
-export const onRequestGet: PagesFunction<Env> = async (context) => {
-  // Get Python backend URL from environment
-  const backendUrl = context.env.BACKEND_URL || 'http://127.0.0.1:8080'
+// Base ticker data (updated periodically for demo)
+const BASE_TICKERS: MarketTickerData[] = [
+  { symbol: 'AAPL', price: 178.32, change: 2.15, changePercent: 1.22 },
+  { symbol: 'MSFT', price: 412.45, change: -3.20, changePercent: -0.77 },
+  { symbol: 'AMZN', price: 168.91, change: 4.32, changePercent: 2.63 },
+  { symbol: 'JPM', price: 182.67, change: 1.45, changePercent: 0.80 },
+  { symbol: 'XOM', price: 108.23, change: -1.12, changePercent: -1.02 },
+]
 
-  try {
-    // Proxy request to Python backend
-    const response = await fetch(`${backendUrl}/market-ticker`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    })
+function addRandomVariation(data: MarketTickerData[]): MarketTickerData[] {
+  // Add small random variations to make it look "live"
+  return data.map(ticker => {
+    const variation = (Math.random() - 0.5) * 0.5 // ±0.25%
+    const newPrice = ticker.price * (1 + variation / 100)
+    const newChange = newPrice - ticker.price
+    const newChangePercent = (newChange / ticker.price) * 100
 
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({
-          error: `Backend returned ${response.status}`
-        }),
-        {
-          status: response.status,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
+    return {
+      symbol: ticker.symbol,
+      price: parseFloat(newPrice.toFixed(2)),
+      change: parseFloat(newChange.toFixed(2)),
+      changePercent: parseFloat(newChangePercent.toFixed(2)),
     }
+  })
+}
 
-    const data = await response.json()
+export const onRequestGet: PagesFunction = async () => {
+  try {
+    // Return mock data with slight variations
+    const tickerData = addRandomVariation(BASE_TICKERS)
 
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify(tickerData), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=30', // Cache for 30 seconds (ticker updates frequently)
+        'Cache-Control': 'public, max-age=30',
       },
     })
   } catch (error) {
-    console.error('[Cloudflare] Market Ticker API Error:', error)
+    console.error('[Mock API] Market Ticker Error:', error)
 
     return new Response(
       JSON.stringify({
-        error: 'Failed to fetch market ticker data from backend',
+        error: 'Failed to generate ticker data',
         message: error instanceof Error ? error.message : 'Unknown error'
       }),
       {
