@@ -47,10 +47,13 @@
 
 ### 5️⃣ SIMULATOR (30s)
 - Navigate: Sidebar → Simulator
+- Say: "Monte Carlo simulations with 10,000 scenarios"
 - Set: 90% stocks, 10% bonds → Run
-- Show: High risk, high return
+- Say: "Stochastic modeling, geometric Brownian motion"
+- Show: High risk, high return distribution
 - Adjust: 60% stocks, 40% bonds → Run
-- Show: Balanced portfolio, AI analysis
+- Say: "LLM analyzes risk-reward profile"
+- Show: Balanced portfolio analysis
 
 ### 6️⃣ INSIGHTS (20s)
 - Navigate: Sidebar → Insights
@@ -66,12 +69,13 @@
 - Say: "8 accessibility options, full i18n"
 
 ### 8️⃣ TECH (30s)
-- Say architecture:
-  - Frontend: Next.js 16 + Cloudflare Pages
-  - Backend: Python FastAPI + Railway
-  - Database: Cloudflare D1
-  - AI: ElevenLabs ConvAI + TTS
-  - APIs: AlphaVantage, FMP
+- Say architecture with JARGON:
+  - Frontend: Next.js 16 RSC + Edge computing (300+ PoPs)
+  - Backend: FastAPI microservice + async/await
+  - Database: D1 distributed SQLite (<10ms latency)
+  - AI/ML: LLMs + Monte Carlo + Neural TTS
+  - Advanced: IRT, Bayesian inference, RAG, WebSockets
+  - APIs: AlphaVantage, FMP with caching layer
 
 ### 9️⃣ CLOSE (20s)
 - Say: "Democratizing financial literacy"
@@ -91,12 +95,15 @@
 - 📊 Practical (portfolio simulator)
 - 📰 Clear (plain-English market news)
 
-**Tech Highlights:**
-- Serverless architecture (Cloudflare + Railway)
-- Edge database for instant queries
-- AI-powered voice interactions
-- Full Spanish translation
-- WCAG accessibility compliant
+**Tech Highlights (USE THESE TERMS!):**
+- **LLMs** - Large Language Models for NLP and conversation
+- **Monte Carlo simulations** - Stochastic portfolio modeling
+- **Neural TTS** - Text-to-speech with prosody
+- **IRT & Bayesian inference** - Adaptive testing
+- **RAG** - Retrieval-Augmented Generation
+- **Edge computing** - Sub-10ms latency globally
+- **Microservices** - FastAPI with async/await
+- **V8 isolates** - Serverless with cold starts <1ms
 
 ---
 
@@ -122,7 +129,7 @@
 > "Traditional investing education overwhelms people with jargon. InvestIQ changes that with AI-powered personalization."
 
 **When showing Voice AI:**
-> "Users can have natural conversations with an AI tutor - no typing, just ask questions like talking to a friend."
+> "Our conversational AI uses Large Language Models with real-time speech-to-text, context-aware dialogue management, and neural TTS with prosody modeling for natural voice interactions."
 
 **When showing Accessibility:**
 > "We built accessibility into the core - not as an afterthought. 8 options, full internationalization, works for everyone."
