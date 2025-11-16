@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, Newspaper, TrendingUp, AlertCircle, Lightbulb, BookOpen } from 'lucide-react'
 import { cn } from "@/lib/utils"
+import { insightsApi } from "@/lib/api"
+import type { InsightsResponse } from "@/types/api"
 
 const sampleHeadlines = [
   "Federal Reserve raises interest rates by 0.25%",
@@ -28,15 +30,25 @@ export default function InsightsPage() {
   const [headline, setHeadline] = useState("")
   const [showExplanation, setShowExplanation] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [apiResponse, setApiResponse] = useState<InsightsResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleExplain = () => {
+  const handleExplain = async () => {
     if (!headline.trim()) return
-    
+
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
+    setError(null)
+    try {
+      const result = await insightsApi.analyzeNews(headline)
+      setApiResponse(result)
       setShowExplanation(true)
-    }, 1500)
+    } catch (err) {
+      console.error('Failed to analyze news:', err)
+      setError('Failed to analyze the headline. Please try again.')
+      setShowExplanation(false)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSampleClick = (sample: string) => {
@@ -170,14 +182,50 @@ export default function InsightsPage() {
                     </div>
 
                     <div className="space-y-4 text-muted-foreground leading-relaxed">
-                      <p>
-                        <strong className="text-foreground">What Happened:</strong> The Federal Reserve (America's central bank) has increased its benchmark interest rate by a quarter of a percentage point (0.25%). This is the rate that influences how much it costs to borrow money throughout the economy.
-                      </p>
-                      
+                      {apiResponse ? (
+                        <>
+                          <p>
+                            <strong className="text-foreground">Analysis:</strong> {apiResponse.explanation}
+                          </p>
+
+                          {apiResponse.used_chunks && apiResponse.used_chunks.length > 0 && (
+                            <>
+                              <p className="mt-6">
+                                <strong className="text-foreground">Related Information:</strong>
+                              </p>
+                              <div className="space-y-3">
+                                {apiResponse.used_chunks.map((chunk, idx) => (
+                                  <div key={idx} className="glass rounded-lg p-4">
+                                    <p className="text-sm">{chunk.snippet}...</p>
+                                    {chunk.metadata && (
+                                      <p className="text-xs text-muted-foreground mt-2">
+                                        Source: {chunk.metadata.section || 'Company Filing'}
+                                      </p>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <p>
+                          <strong className="text-foreground">What Happened:</strong> The Federal Reserve (America's central bank) has increased its benchmark interest rate by a quarter of a percentage point (0.25%). This is the rate that influences how much it costs to borrow money throughout the economy.
+                        </p>
+                      )}
+                    </div>
+
+                    {error && (
+                      <div className="mt-4 p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive">
+                        {error}
+                      </div>
+                    )}
+
+                    <div className="hidden space-y-4 text-muted-foreground leading-relaxed">
                       <p>
                         <strong className="text-foreground">Why It Matters:</strong> When interest rates rise, borrowing becomes more expensive for everyone—from people taking out mortgages to companies financing new projects. This typically slows down economic activity and can help control inflation.
                       </p>
-                      
+
                       <p>
                         <strong className="text-foreground">Impact on Your Investments:</strong> Higher interest rates often mean:
                       </p>
