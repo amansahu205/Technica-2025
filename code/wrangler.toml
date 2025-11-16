@@ -1,6 +1,5 @@
 name = "investiq-frontend"
 compatibility_date = "2024-01-01"
-account_id = "8fbe13dc4c1d3112f8b00f01e1eaa6d4"
 
 # Cloudflare Pages Configuration
 pages_build_output_dir = "out"
