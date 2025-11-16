@@ -21,7 +21,7 @@ interface Question {
 
 export default function AssessmentPage() {
   const { t } = useI18n()
-  const { name } = useUser()
+  const { user } = useUser()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -61,14 +61,12 @@ export default function AssessmentPage() {
   const submitAssessment = async () => {
     try {
       const questionIds = questions.map(q => q.id)
-      // Generate a temporary user ID based on name or use a session ID
-      const userId = name ? `user_${name.replace(/\s+/g, '_')}` : undefined
 
       const response = await fetch('/api/assessment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId,
+          userId: user?.id,
           questionIds,
           answers
         })

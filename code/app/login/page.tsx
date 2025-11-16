@@ -15,21 +15,44 @@ import Link from 'next/link'
 export default function LoginPage() {
   const router = useRouter()
   const { t } = useI18n()
-  const { setIsAuthenticated } = useUser()
+  const { setUser } = useUser()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     console.log('[v0] Login page mounted')
   }, [])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('[v0] Login submitted')
-    // Simulate login
-    setIsAuthenticated(true)
-    router.push('/')
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to login')
+      }
+
+      // Set user in context
+      setUser(data.user)
+
+      // Redirect to home
+      router.push('/')
+    } catch (err: any) {
+      setError(err.message || 'Failed to login')
+      setLoading(false)
+    }
   }
 
   const handleGuestContinue = () => {
@@ -112,6 +135,12 @@ export default function LoginPage() {
                 className="p-8 md:p-12"
               >
                 <form onSubmit={handleLogin} className="space-y-6">
+                  {error && (
+                    <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+                      {error}
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-base">
                       {t('login.email')}
@@ -162,8 +191,9 @@ export default function LoginPage() {
                     type="submit"
                     size="lg"
                     className="w-full h-12 text-base"
+                    disabled={loading}
                   >
-                    {t('login.continue')}
+                    {loading ? 'Logging in...' : t('login.continue')}
                   </Button>
 
                   <Button
