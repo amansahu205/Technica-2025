@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Lexend_Deca } from 'next/font/google'
+// Temporary: Use system fonts to fix Cloudflare Pages build
+// import { Geist, Geist_Mono, Lexend_Deca } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { ThemeProvider } from '@/lib/theme-provider'
@@ -9,9 +10,10 @@ import { I18nProvider } from '@/lib/i18n'
 import { AccessibilityWrapper } from '@/components/accessibility-wrapper'
 import { UserProvider } from '@/lib/user-context'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
-const _lexendDeca = Lexend_Deca({ subsets: ["latin"], variable: '--font-dyslexia' });
+// Temporary: Use system fonts
+const _geist = { className: '' };
+const _geistMono = { className: '' };
+const _lexendDeca = { variable: '--font-dyslexia', className: '' };
 
 export const metadata: Metadata = {
   title: 'InvestIQ - AI-Powered Investing Education',
