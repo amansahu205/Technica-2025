@@ -20,7 +20,8 @@ export function LessonAudioPlayer({ lessonId, autoPlay = false, className }: Les
   const [volume, setVolume] = useState(1)
   const [isMuted, setIsMuted] = useState(false)
 
-  const audioSrc = `/audio/lessons/${lessonId}.mp3`
+  // Use ElevenLabs API endpoint instead of static files
+  const audioSrc = `/api/text-to-speech?lessonId=${lessonId}`
 
   useEffect(() => {
     const audio = audioRef.current
