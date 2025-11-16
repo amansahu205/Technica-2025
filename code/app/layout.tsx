@@ -9,6 +9,7 @@ import { AccessibilityProvider } from '@/lib/accessibility-context'
 import { I18nProvider } from '@/lib/i18n'
 import { AccessibilityWrapper } from '@/components/accessibility-wrapper'
 import { UserProvider } from '@/lib/user-context'
+import { ElevenLabsVoiceTutor } from '@/components/elevenlabs-voice-tutor'
 
 // Temporary: Use system fonts
 const _geist = { className: '' };
@@ -60,6 +61,7 @@ export default function RootLayout({
           </UserProvider>
         </I18nProvider>
         <Analytics />
+        <ElevenLabsVoiceTutor />
       </body>
     </html>
   )
