@@ -1,0 +1,392 @@
+[
+  {
+    "id": "B1",
+    "difficultyScore": 1,
+    "text": "What is a stock?",
+    "options": [
+      { "key": "A", "value": "A loan to a company" },
+      { "key": "B", "value": "Ownership in a company" },
+      { "key": "C", "value": "A type of government bond" },
+      { "key": "D", "value": "A guaranteed return investment" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "A stock represents partial ownership in a company. If the company grows, your investment may grow."
+  },
+  {
+    "id": "B2",
+    "difficultyScore": 1,
+    "text": "What does “risk” mean in investing?",
+    "options": [
+      { "key": "A", "value": "Guaranteed loss" },
+      { "key": "B", "value": "Chance of making a profit" },
+      { "key": "C", "value": "Possibility that returns may differ from expected" },
+      { "key": "D", "value": "A type of tax" }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Risk is uncertainty. Returns might be higher or lower than expected — both outcomes are possible."
+  },
+  {
+    "id": "B3",
+    "difficultyScore": 1,
+    "text": "What is diversification?",
+    "options": [
+      { "key": "A", "value": "Investing all money in one stock" },
+      { "key": "B", "value": "Spreading investments across different assets" },
+      { "key": "C", "value": "Keeping money only as cash" },
+      { "key": "D", "value": "Buying only gold" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Diversification reduces overall risk by not relying on a single investment."
+  },
+  {
+    "id": "B4",
+    "difficultyScore": 1,
+    "text": "Which asset is typically considered less risky?",
+    "options": [
+      { "key": "A", "value": "Government bonds" },
+      { "key": "B", "value": "Small-cap stocks" },
+      { "key": "C", "value": "Cryptocurrencies" },
+      { "key": "D", "value": "Venture capital funds" }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Government bonds have lower volatility and default risk compared to other assets."
+  },
+  {
+    "id": "B5",
+    "difficultyScore": 1,
+    "text": "What is a mutual fund?",
+    "options": [
+      { "key": "A", "value": "A savings account" },
+      { "key": "B", "value": "A pool of investor money managed by professionals" },
+      { "key": "C", "value": "A type of loan" },
+      { "key": "D", "value": "A government subsidy" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mutual funds allow small investors to own diversified portfolios with professional management."
+  },
+  {
+    "id": "B6",
+    "difficultyScore": 1,
+    "text": "What is compound interest?",
+    "options": [
+      { "key": "A", "value": "Interest calculated only on the initial amount" },
+      { "key": "B", "value": "Interest earned on both principal and previous interest" },
+      { "key": "C", "value": "Penalty for delaying payments" },
+      { "key": "D", "value": "Interest charged by stock brokers" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Compound interest grows faster because you earn interest on past interest."
+  },
+  {
+    "id": "B7",
+    "difficultyScore": 1,
+    "text": "What happens when inflation rises?",
+    "options": [
+      { "key": "A", "value": "Purchasing power decreases" },
+      { "key": "B", "value": "Asset values always increase" },
+      { "key": "C", "value": "Investment returns are guaranteed" },
+      { "key": "D", "value": "Stocks stop trading" }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Higher inflation reduces the value of money over time."
+  },
+  {
+    "id": "B8",
+    "difficultyScore": 1,
+    "text": "What is an ETF (Exchange-Traded Fund)?",
+    "options": [
+      { "key": "A", "value": "A loan from the government" },
+      { "key": "B", "value": "A fund that trades on an exchange like a stock" },
+      { "key": "C", "value": "A form of cryptocurrency" },
+      { "key": "D", "value": "A private company share" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "ETFs combine diversification of mutual funds with the trading flexibility of stocks."
+  },
+  {
+    "id": "B9",
+    "difficultyScore": 1,
+    "text": "Why do people invest?",
+    "options": [
+      { "key": "A", "value": "To avoid paying taxes" },
+      { "key": "B", "value": "To grow their money over time" },
+      { "key": "C", "value": "To guarantee profits" },
+      { "key": "D", "value": "Because banks force them" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Investing helps people build wealth through growth, interest, or dividends."
+  },
+  {
+    "id": "B10",
+    "difficultyScore": 1,
+    "text": "What is a dividend?",
+    "options": [
+      { "key": "A", "value": "A fee paid to brokers" },
+      { "key": "B", "value": "A company’s share of profits paid to shareholders" },
+      { "key": "C", "value": "A guarantee of future returns" },
+      { "key": "D", "value": "A penalty for selling stocks" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Some companies distribute part of their earnings to investors through dividends."
+  },
+  {
+    "id": "I1",
+    "difficultyScore": 2,
+    "text": "Why do stock prices move up or down?",
+    "options": [
+      { "key": "A", "value": "Random government changes" },
+      { "key": "B", "value": "Changes in supply and demand" },
+      { "key": "C", "value": "Because companies adjust prices" },
+      { "key": "D", "value": "Banks control it" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stock prices fluctuate when investor demand rises or falls due to news, earnings, and expectations."
+  },
+  {
+    "id": "I2",
+    "difficultyScore": 2,
+    "text": "What does the P/E ratio indicate?",
+    "options": [
+      { "key": "A", "value": "A company’s debt level" },
+      { "key": "B", "value": "How expensive a stock is relative to its earnings" },
+      { "key": "C", "value": "Dividend payout" },
+      { "key": "D", "value": "Interest rate risk" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "A higher P/E suggests investors expect future growth; a low P/E may indicate undervaluation."
+  },
+  {
+    "id": "I3",
+    "difficultyScore": 2,
+    "text": "What happens to markets when interest rates rise?",
+    "options": [
+      { "key": "A", "value": "Stock prices typically fall" },
+      { "key": "B", "value": "Stock prices always rise" },
+      { "key": "C", "value": "Bond prices rise" },
+      { "key": "D", "value": "Nothing changes" }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Higher interest rates increase borrowing costs, reducing company profits and lowering stock valuations."
+  },
+  {
+    "id": "I4",
+    "difficultyScore": 2,
+    "text": "What is dollar-cost averaging?",
+    "options": [
+      { "key": "A", "value": "Buying stocks only during market crashes" },
+      { "key": "B", "value": "Investing a fixed amount regularly, regardless of price" },
+      { "key": "C", "value": "Buying all shares at once" },
+      { "key": "D", "value": "Timing the market" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "This strategy reduces the effect of volatility and avoids emotional decisions."
+  },
+  {
+    "id": "I5",
+    "difficultyScore": 2,
+    "text": "What is market volatility?",
+    "options": [
+      { "key": "A", "value": "Predictable price behavior" },
+      { "key": "B", "value": "A measure of how much prices fluctuate" },
+      { "key": "C", "value": "Guaranteed losses" },
+      { "key": "D", "value": "Government-controlled pricing" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "High volatility means prices move rapidly; low volatility means more stable pricing."
+  },
+  {
+    "id": "I6",
+    "difficultyScore": 2,
+    "text": "Index funds track:",
+    "options": [
+      { "key": "A", "value": "Individual investor portfolios" },
+      { "key": "B", "value": "The performance of a market index like S&P 500" },
+      { "key": "C", "value": "Only government bonds" },
+      { "key": "D", "value": "Only technology companies" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Index funds passively replicate an index’s performance, offering low-cost diversification."
+  },
+  {
+    "id": "I7",
+    "difficultyScore": 2,
+    "text": "A bear market refers to:",
+    "options": [
+      { "key": "A", "value": "Rising stock prices" },
+      { "key": "B", "value": "Falling stock prices" },
+      { "key": "C", "value": "Stable markets" },
+      { "key": "D", "value": "Government-backed markets" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "A bear market is a prolonged decline, typically defined as a 20% drop from recent highs."
+  },
+  {
+    "id": "I8",
+    "difficultyScore": 2,
+    "text": "Which investment typically has the highest long-term returns?",
+    "options": [
+      { "key": "A", "value": "Cash" },
+      { "key": "B", "value": "Bonds" },
+      { "key": "C", "value": "Stocks" },
+      { "key": "D", "value": "Certificates of deposit" }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Historically, stocks outperform bonds and cash over long periods despite short-term volatility."
+  },
+  {
+    "id": "I9",
+    "difficultyScore": 2,
+    "text": "What does “asset allocation” mean?",
+    "options": [
+      { "key": "A", "value": "Trading stocks frequently" },
+      { "key": "B", "value": "Splitting investments among different asset classes" },
+      { "key": "C", "value": "Investing only in real estate" },
+      { "key": "D", "value": "Reducing investment expenses" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Proper allocation helps balance risk and return based on investor goals."
+  },
+  {
+    "id": "I10",
+    "difficultyScore": 2,
+    "text": "What is the role of a financial advisor?",
+    "options": [
+      { "key": "A", "value": "Guarantee returns" },
+      { "key": "B", "value": "Help plan and manage investments based on goals and risk tolerance" },
+      { "key": "C", "value": "Control the market" },
+      { "key": "D", "value": "Approve stock trades" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Advisors provide guidance but cannot guarantee profits."
+  },
+  {
+    "id": "A1",
+    "difficultyScore": 3,
+    "text": "According to Modern Portfolio Theory, an “efficient portfolio” is one that:",
+    "options": [
+      { "key": "A", "value": "Eliminates all risk" },
+      { "key": "B", "value": "Maximizes returns for a given level of risk" },
+      { "key": "C", "value": "Avoids international markets" },
+      { "key": "D", "value": "Invests only in bonds" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Efficient portfolios lie on the efficient frontier, balancing optimal risk and return."
+  },
+  {
+    "id": "A2",
+    "difficultyScore": 3,
+    "text": "What does ‘beta’ measure?",
+    "options": [
+      { "key": "A", "value": "A stock’s total risk" },
+      { "key": "B", "value": "Systematic risk relative to the market" },
+      { "key": "C", "value": "A portfolio’s diversification" },
+      { "key": "D", "value": "A company’s profitability" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Beta shows sensitivity to market movements — key for expected return calculations in CAPM."
+  },
+  {
+    "id": "A3",
+    "difficultyScore": 3,
+    "text": "Alpha represents:",
+    "options": [
+      { "key": "A", "value": "Market return" },
+      { "key": "B", "value": "Performance above or below a benchmark" },
+      { "key": "C", "value": "Total portfolio risk" },
+      { "key": "D", "value": "Interest rate sensitivity" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Positive alpha means the portfolio outperformed; negative alpha means underperformed."
+  },
+  {
+    "id": "A4",
+    "difficultyScore": 3,
+    "text": "The Sharpe Ratio measures:",
+    "options": [
+      { "key": "A", "value": "Return per unit of total risk" },
+      { "key": "B", "value": "Only volatility" },
+      { "key": "C", "value": "Portfolio size" },
+      { "key": "D", "value": "Market timing efficiency" }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sharpe ratio = (Return – risk-free rate) ÷ volatility."
+  },
+  {
+    "id": "A5",
+    "difficultyScore": 3,
+    "text": "Yield curve inversion typically signals:",
+    "options": [
+      { "key": "A", "value": "Strong economic growth" },
+      { "key": "B", "value": "Upcoming recession" },
+      { "key": "C", "value": "High inflation" },
+      { "key": "D", "value": "Low volatility" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Historically, inverted yield curves have preceded many recessions."
+  },
+  {
+    "id": "A6",
+    "difficultyScore": 3,
+    "text": "DCF valuation determines a company’s value by:",
+    "options": [
+      { "key": "A", "value": "Adding total revenue" },
+      { "key": "B", "value": "Discounting future cash flows to present value" },
+      { "key": "C", "value": "Summing assets" },
+      { "key": "D", "value": "Comparing stock prices" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "DCF uses future cash projections discounted by a company’s WACC."
+  },
+  {
+    "id": "A7",
+    "difficultyScore": 3,
+    "text": "What is the “efficient frontier”?",
+    "options": [
+      { "key": "A", "value": "A set of portfolios with the lowest possible risk" },
+      { "key": "B", "value": "Portfolios offering the highest return for a given risk" },
+      { "key": "C", "value": "All possible market portfolios" },
+      { "key": "D", "value": "A set of uncorrelated assets" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Combines assets optimally to create the best risk-return combinations."
+  },
+  {
+    "id": "A8",
+    "difficultyScore": 3,
+    "text": "Which derivative gives the right, not the obligation, to buy an asset?",
+    "options": [
+      { "key": "A", "value": "Put option" },
+      { "key": "B", "value": "Call option" },
+      { "key": "C", "value": "Swap" },
+      { "key": "D", "value": "Forward contract" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "A call option lets investors buy the underlying asset at a set price before expiry."
+  },
+  {
+    "id": "A9",
+    "difficultyScore": 3,
+    "text": "What does WACC represent?",
+    "options": [
+      { "key": "A", "value": "Company tax liabilities" },
+      { "key": "B", "value": "Average cost of debt and equity financing" },
+      { "key": "C", "value": "Total revenue" },
+      { "key": "D", "value": "Annual cash flow" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "WACC acts as the discount rate for valuing cash flows."
+  },
+  {
+    "id": "A10",
+    "difficultyScore": 3,
+    "text": "In CAPM, expected return increases with:",
+    "options": [
+      { "key": "A", "value": "Total risk" },
+      { "key": "B", "value": "Systematic risk (beta)" },
+      { "key": "C", "value": "Diversification" },
+      { "key": "D", "value": "Interest rates only" }
+    ],
+    "correctAnswer": "B",
+    "explanation": "CAPM says investors are rewarded only for market-related risk, not diversifiable risk."
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "user123": {
+    "username": "john_doe",
+    "level": "Beginner",
+    "lastScore": 1.6
+  },
+  "user456": {
+    "username": "jane_smith",
+    "level": "Intermediate",
+    "lastScore": 2.1
+  }
+}
