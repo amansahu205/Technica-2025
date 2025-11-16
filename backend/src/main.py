@@ -75,6 +75,9 @@ class Handler(BaseHTTPRequestHandler):
             return
         self._json_response(404, {"error": "Not Found"})
 
-def run(host="127.0.0.1", port=PORT):
+def run(host="0.0.0.0", port=PORT):
+    """Start the HTTP server - bind to 0.0.0.0 to accept external connections"""
+    print(f"Starting InvestIQ server on {host}:{port}")
     httpd = HTTPServer((host, port), Handler)
+    print(f"✓ Server running and listening for connections...")
     httpd.serve_forever()
