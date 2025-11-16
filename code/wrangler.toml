@@ -12,5 +12,9 @@ database_id = "fdb7c213-b732-4155-88c6-000900224c56"
 
 # Environment Variables
 [vars]
-# Python backend URL - Update this for production
-# BACKEND_URL = "https://your-backend-url.fly.dev"
+# Backend URL (Railway deployment)
+BACKEND_URL = "https://technica-2025-production.up.railway.app"
+
+# ElevenLabs API Key - Add via Cloudflare Dashboard or wrangler secret
+# Run: npx wrangler pages secret put ELEVENLABS_API_KEY
+# ELEVENLABS_API_KEY = "sk_..." (DO NOT commit this - use secrets!)
