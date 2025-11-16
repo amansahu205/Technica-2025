@@ -26,14 +26,18 @@ export default function SignupPage() {
   const router = useRouter()
   const { t } = useI18n()
   const { updateSettings } = useAccessibility()
-  const { setName, setOnboardingComplete, setIsAuthenticated } = useUser()
-  
+  const { setUser } = useUser()
+
   const [currentStep, setCurrentStep] = useState(1)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [nameValue, setNameValue] = useState('')
   const [region, setRegion] = useState('')
   const [familiarity, setFamiliarity] = useState('')
   const [learningPreferences, setLearningPreferences] = useState<string[]>([])
   const [accessibilityPreferences, setAccessibilityPreferences] = useState<string[]>([])
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const progress = (currentStep / TOTAL_STEPS) * 100
 
@@ -61,27 +65,59 @@ export default function SignupPage() {
     }
   }
 
-  const handleComplete = () => {
-    setName(nameValue)
-    setOnboardingComplete(false)
+  const handleComplete = async () => {
+    setLoading(true)
+    setError('')
 
-    updateSettings({
-      largerText: accessibilityPreferences.includes('larger-text'),
-      highContrast: accessibilityPreferences.includes('high-contrast'),
-      screenReaderFriendly: accessibilityPreferences.includes('screen-reader'),
-      audioFirst: accessibilityPreferences.includes('audio-first'),
-      reducedAnimations: accessibilityPreferences.includes('reduced-animations'),
-      minimalVisuals: accessibilityPreferences.includes('minimal-visuals'),
-    })
+    try {
+      // Create account via API
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          name: nameValue,
+          region,
+          familiarity,
+          learningPreferences,
+          accessibilityPreferences,
+        }),
+      })
 
-    setIsAuthenticated(true)
-    router.push('/')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create account')
+      }
+
+      // Update accessibility settings
+      updateSettings({
+        largerText: accessibilityPreferences.includes('larger-text'),
+        highContrast: accessibilityPreferences.includes('high-contrast'),
+        screenReaderFriendly: accessibilityPreferences.includes('screen-reader'),
+        audioFirst: accessibilityPreferences.includes('audio-first'),
+        reducedAnimations: accessibilityPreferences.includes('reduced-animations'),
+        minimalVisuals: accessibilityPreferences.includes('minimal-visuals'),
+      })
+
+      // Set user in context
+      setUser(data.user)
+
+      // Redirect to home
+      router.push('/')
+    } catch (err: any) {
+      setError(err.message || 'Failed to create account')
+      setLoading(false)
+      // Go back to step 1 to show error
+      setCurrentStep(1)
+    }
   }
 
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return nameValue.trim().length > 0
+        return email.trim().length > 0 && password.length >= 6 && nameValue.trim().length > 0
       case 2:
         return region.length > 0
       case 3:
@@ -131,12 +167,42 @@ export default function SignupPage() {
                 {currentStep === 1 && (
                   <div className="space-y-4">
                     <h2 className="text-2xl font-semibold text-balance">
-                      {t('signup.step1.title')}
+                      Create Your Account
                     </h2>
+                    {error && (
+                      <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+                        {error}
+                      </div>
+                    )}
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="sr-only">
-                        {t('signup.step1.title')}
-                      </Label>
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        className="h-14 text-lg glass"
+                        autoComplete="email"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="password">Password</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="At least 6 characters"
+                        className="h-14 text-lg glass"
+                        autoComplete="new-password"
+                        required
+                        minLength={6}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
                       <Input
                         id="name"
                         type="text"
@@ -144,8 +210,8 @@ export default function SignupPage() {
                         onChange={(e) => setNameValue(e.target.value)}
                         placeholder={t('signup.step1.placeholder')}
                         className="h-14 text-lg glass"
-                        autoFocus
                         autoComplete="given-name"
+                        required
                       />
                     </div>
                   </div>
@@ -312,8 +378,8 @@ export default function SignupPage() {
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 ) : (
-                  <Button onClick={handleComplete} className="gap-2">
-                    {t('signup.complete')}
+                  <Button onClick={handleComplete} disabled={loading} className="gap-2">
+                    {loading ? 'Creating Account...' : t('signup.complete')}
                     <Check className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 )}
