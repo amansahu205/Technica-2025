@@ -1,0 +1,8 @@
+# Python dependencies for InvestIQ Backend
+# All dependencies are from Python standard library
+# No external packages required!
+
+# Optional: For better JSON handling (if needed in future)
+# requests==2.31.0
+
+# This file is intentionally minimal as the backend uses only stdlib
