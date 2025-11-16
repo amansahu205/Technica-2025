@@ -1,0 +1,43 @@
+# Git files
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# Virtual environments
+venv
+env
+ENV
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation and scripts (not needed in container)
+*.md
+*.sh
+
+# Environment file (secrets should be set via Fly.io secrets)
+.env
+.env.*
+
+# Data directory (can be large, will be created empty)
+data/f500_json/*
+!data/f500_json/.gitkeep
