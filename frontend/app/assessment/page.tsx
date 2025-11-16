@@ -10,6 +10,8 @@ import { ChevronLeft, ChevronRight, SkipForward, TrendingUp, CheckCircle2, Alert
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useI18n } from "@/lib/i18n"
+import { assessmentApi } from "@/lib/api"
+import type { AssessmentResponse } from "@/types/api"
 
 const quizQuestions = [
   {
@@ -130,6 +132,8 @@ export default function AssessmentPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answers, setAnswers] = useState<(number | null)[]>(Array(quizQuestions.length).fill(null))
   const [showResults, setShowResults] = useState(false)
+  const [apiResults, setApiResults] = useState<AssessmentResponse | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex)
@@ -138,12 +142,30 @@ export default function AssessmentPage() {
     setAnswers(newAnswers)
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(answers[currentQuestion + 1])
     } else {
-      setShowResults(true)
+      // Submit to backend API
+      setIsSubmitting(true)
+      try {
+        // Convert answers to format expected by backend (a, b, c, d)
+        const answerLetters = answers.map(ans => {
+          if (ans === null) return ''
+          return String.fromCharCode(97 + ans) // 0->a, 1->b, 2->c, 3->d
+        })
+
+        const result = await assessmentApi.submitAssessment(answerLetters)
+        setApiResults(result)
+        setShowResults(true)
+      } catch (error) {
+        console.error('Failed to submit assessment:', error)
+        // Fallback to local calculation
+        setShowResults(true)
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   }
 
@@ -159,15 +181,24 @@ export default function AssessmentPage() {
   }
 
   const calculateResults = () => {
-    const correctCount = answers.filter((answer, index) => 
+    // Use API results if available
+    if (apiResults) {
+      const correctCount = apiResults.score
+      const percentage = (correctCount / quizQuestions.length) * 100
+      const level = apiResults.profile.charAt(0).toUpperCase() + apiResults.profile.slice(1)
+      return { correctCount, percentage, level }
+    }
+
+    // Fallback to local calculation
+    const correctCount = answers.filter((answer, index) =>
       answer === quizQuestions[index].correctAnswer
     ).length
     const percentage = (correctCount / quizQuestions.length) * 100
-    
+
     let level = "Beginner"
     if (percentage >= 70) level = "Advanced"
     else if (percentage >= 40) level = "Intermediate"
-    
+
     return { correctCount, percentage, level }
   }
 
@@ -396,10 +427,10 @@ export default function AssessmentPage() {
 
           <Button
             onClick={handleNext}
-            disabled={selectedAnswer === null}
+            disabled={selectedAnswer === null || isSubmitting}
             aria-label={currentQuestion === quizQuestions.length - 1 ? t('assessment.finish') : `${t('assessment.next')} question`}
           >
-            {currentQuestion === quizQuestions.length - 1 ? t('assessment.finish') : t('assessment.next')}
+            {isSubmitting ? 'Submitting...' : currentQuestion === quizQuestions.length - 1 ? t('assessment.finish') : t('assessment.next')}
             <ChevronRight className="ml-2 h-5 w-5" aria-hidden="true" />
           </Button>
         </nav>
