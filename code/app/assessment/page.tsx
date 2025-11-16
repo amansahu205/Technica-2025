@@ -21,7 +21,7 @@ interface Question {
 
 export default function AssessmentPage() {
   const { t } = useI18n()
-  const { user } = useUser()
+  const { name } = useUser()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -61,11 +61,14 @@ export default function AssessmentPage() {
   const submitAssessment = async () => {
     try {
       const questionIds = questions.map(q => q.id)
+      // Generate a temporary user ID based on name or use a session ID
+      const userId = name ? `user_${name.replace(/\s+/g, '_')}` : undefined
+
       const response = await fetch('/api/assessment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: user?.id,
+          userId,
           questionIds,
           answers
         })
@@ -349,9 +352,9 @@ export default function AssessmentPage() {
           <Button
             onClick={handleNext}
             disabled={selectedAnswer === null}
-            aria-label={currentQuestion === quizQuestions.length - 1 ? t('assessment.finish') : `${t('assessment.next')} question`}
+            aria-label={currentQuestion === questions.length - 1 ? t('assessment.finish') : `${t('assessment.next')} question`}
           >
-            {currentQuestion === quizQuestions.length - 1 ? t('assessment.finish') : t('assessment.next')}
+            {currentQuestion === questions.length - 1 ? t('assessment.finish') : t('assessment.next')}
             <ChevronRight className="ml-2 h-5 w-5" aria-hidden="true" />
           </Button>
         </nav>
