@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { AppLayout } from "@/components/app-layout"
 import { Button } from "@/components/ui/button"
@@ -10,140 +10,87 @@ import { ChevronLeft, ChevronRight, SkipForward, TrendingUp, CheckCircle2, Alert
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useI18n } from "@/lib/i18n"
+import { useUser } from "@/lib/user-context"
 
-const quizQuestions = [
-  {
-    id: 1,
-    question: "What is a stock?",
-    options: [
-      "A loan you give to a company",
-      "Ownership share in a company",
-      "A type of savings account",
-      "A government bond"
-    ],
-    correctAnswer: 1
-  },
-  {
-    id: 2,
-    question: "What does diversification mean in investing?",
-    options: [
-      "Investing all money in one stock",
-      "Spreading investments across different assets",
-      "Only buying technology stocks",
-      "Keeping all money in cash"
-    ],
-    correctAnswer: 1
-  },
-  {
-    id: 3,
-    question: "What is a dividend?",
-    options: [
-      "A stock price increase",
-      "A trading fee",
-      "Profit paid to shareholders",
-      "A type of loan"
-    ],
-    correctAnswer: 2
-  },
-  {
-    id: 4,
-    question: "What does 'bull market' mean?",
-    options: [
-      "Market prices are falling",
-      "Market prices are rising",
-      "Market is closed",
-      "High volatility period"
-    ],
-    correctAnswer: 1
-  },
-  {
-    id: 5,
-    question: "What is an index fund?",
-    options: [
-      "A single company stock",
-      "A type of bond",
-      "A fund tracking a market index",
-      "A savings account"
-    ],
-    correctAnswer: 2
-  },
-  {
-    id: 6,
-    question: "What is compound interest?",
-    options: [
-      "Simple interest on principal only",
-      "Interest on interest over time",
-      "A type of loan",
-      "A stock trading strategy"
-    ],
-    correctAnswer: 1
-  },
-  {
-    id: 7,
-    question: "What does P/E ratio measure?",
-    options: [
-      "Company debt levels",
-      "Stock price relative to earnings",
-      "Dividend yield",
-      "Trading volume"
-    ],
-    correctAnswer: 1
-  },
-  {
-    id: 8,
-    question: "What is a bond?",
-    options: [
-      "Ownership in a company",
-      "A debt investment",
-      "A commodity",
-      "A currency"
-    ],
-    correctAnswer: 1
-  },
-  {
-    id: 9,
-    question: "What is market capitalization?",
-    options: [
-      "Total value of company's outstanding shares",
-      "Annual revenue",
-      "Number of employees",
-      "Trading volume"
-    ],
-    correctAnswer: 0
-  },
-  {
-    id: 10,
-    question: "What is dollar-cost averaging?",
-    options: [
-      "Selling at the highest price",
-      "Investing fixed amounts regularly",
-      "Day trading strategy",
-      "Buying only cheap stocks"
-    ],
-    correctAnswer: 1
-  }
-]
+interface Question {
+  id: string
+  difficultyScore: number
+  text: string
+  options: Array<{ key: string; value: string }>
+}
 
 export default function AssessmentPage() {
   const { t } = useI18n()
+  const { user } = useUser()
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
-  const [answers, setAnswers] = useState<(number | null)[]>(Array(quizQuestions.length).fill(null))
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
+  const [answers, setAnswers] = useState<(string | null)[]>([])
   const [showResults, setShowResults] = useState(false)
+  const [assessmentResult, setAssessmentResult] = useState<any>(null)
 
-  const handleAnswerSelect = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex)
+  // Fetch questions on mount
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch('/api/questions?count=10')
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions')
+        }
+        const data = await response.json()
+        setQuestions(data)
+        setAnswers(Array(data.length).fill(null))
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching questions:', error)
+        setLoading(false)
+      }
+    }
+
+    fetchQuestions()
+  }, [])
+
+  const handleAnswerSelect = (answerKey: string) => {
+    setSelectedAnswer(answerKey)
     const newAnswers = [...answers]
-    newAnswers[currentQuestion] = answerIndex
+    newAnswers[currentQuestion] = answerKey
     setAnswers(newAnswers)
   }
 
+  const submitAssessment = async () => {
+    try {
+      const questionIds = questions.map(q => q.id)
+      const response = await fetch('/api/assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user?.id,
+          questionIds,
+          answers
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit assessment')
+      }
+
+      const result = await response.json()
+      setAssessmentResult(result)
+      setShowResults(true)
+    } catch (error) {
+      console.error('Error submitting assessment:', error)
+      // Show results anyway with local calculation as fallback
+      setShowResults(true)
+    }
+  }
+
   const handleNext = () => {
-    if (currentQuestion < quizQuestions.length - 1) {
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(answers[currentQuestion + 1])
     } else {
-      setShowResults(true)
+      submitAssessment()
     }
   }
 
@@ -158,24 +105,29 @@ export default function AssessmentPage() {
     handleNext()
   }
 
-  const calculateResults = () => {
-    const correctCount = answers.filter((answer, index) => 
-      answer === quizQuestions[index].correctAnswer
-    ).length
-    const percentage = (correctCount / quizQuestions.length) * 100
-    
-    let level = "Beginner"
-    if (percentage >= 70) level = "Advanced"
-    else if (percentage >= 40) level = "Intermediate"
-    
-    return { correctCount, percentage, level }
+  const progress = questions.length > 0 ? ((currentQuestion + 1) / questions.length) * 100 : 0
+
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="max-w-3xl mx-auto text-center py-20">
+          <p className="text-lg text-muted-foreground">Loading questions...</p>
+        </div>
+      </AppLayout>
+    )
   }
 
-  const progress = ((currentQuestion + 1) / quizQuestions.length) * 100
+  if (questions.length === 0) {
+    return (
+      <AppLayout>
+        <div className="max-w-3xl mx-auto text-center py-20">
+          <p className="text-lg text-muted-foreground">No questions available. Please try again later.</p>
+        </div>
+      </AppLayout>
+    )
+  }
 
-  if (showResults) {
-    const results = calculateResults()
-    
+  if (showResults && assessmentResult) {
     return (
       <AppLayout>
         <motion.div
@@ -186,15 +138,15 @@ export default function AssessmentPage() {
           aria-label={t('assessment.title') + ' Results'}
         >
           <Card className="glass-strong rounded-2xl p-8 md:p-12 text-center">
-            <div 
-              className="sr-only" 
-              role="status" 
+            <div
+              className="sr-only"
+              role="status"
               aria-live="polite"
               aria-atomic="true"
             >
-              Assessment complete. You scored {results.correctCount} out of {quizQuestions.length}. Your level is {results.level}.
+              Assessment complete. You scored {assessmentResult.correctAnswers} out of {assessmentResult.totalQuestions}. Your level is {assessmentResult.profile}.
             </div>
-            
+
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -206,21 +158,21 @@ export default function AssessmentPage() {
               </div>
               <h1 className="text-4xl font-bold mb-4">Assessment Complete!</h1>
               <p className="text-xl text-muted-foreground">
-                Your detected level: <span className="text-primary font-semibold">{results.level}</span>
+                Your detected level: <span className="text-primary font-semibold">{assessmentResult.profile}</span>
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" role="list" aria-label="Assessment results summary">
               <div className="glass rounded-xl p-6" role="listitem">
-                <p className="text-3xl font-bold text-accent-green">{results.correctCount}/{quizQuestions.length}</p>
+                <p className="text-3xl font-bold text-accent-green">{assessmentResult.correctAnswers}/{assessmentResult.totalQuestions}</p>
                 <p className="text-sm text-muted-foreground mt-2">Correct Answers</p>
               </div>
               <div className="glass rounded-xl p-6" role="listitem">
-                <p className="text-3xl font-bold text-primary">{Math.round(results.percentage)}%</p>
+                <p className="text-3xl font-bold text-primary">{Math.round(assessmentResult.score)}%</p>
                 <p className="text-sm text-muted-foreground mt-2">Accuracy</p>
               </div>
               <div className="glass rounded-xl p-6" role="listitem">
-                <p className="text-3xl font-bold text-chart-3">{results.level}</p>
+                <p className="text-3xl font-bold text-chart-3">{assessmentResult.profile}</p>
                 <p className="text-sm text-muted-foreground mt-2">Your Level</p>
               </div>
             </div>
@@ -278,15 +230,15 @@ export default function AssessmentPage() {
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium" id="question-progress">
-              {t('assessment.question')} {currentQuestion + 1} {t('assessment.of')} {quizQuestions.length}
+              {t('assessment.question')} {currentQuestion + 1} {t('assessment.of')} {questions.length}
             </span>
             <span className="text-sm text-muted-foreground">
               {Math.round(progress)}% Complete
             </span>
           </div>
-          <Progress 
-            value={progress} 
-            className="h-2" 
+          <Progress
+            value={progress}
+            className="h-2"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(progress)}
@@ -306,42 +258,42 @@ export default function AssessmentPage() {
             <Card className="glass-strong rounded-2xl p-8 md:p-12 mb-6">
               <fieldset>
                 <legend className="text-2xl md:text-3xl font-bold mb-8 text-balance">
-                  {quizQuestions[currentQuestion].question}
+                  {questions[currentQuestion].text}
                 </legend>
 
-                <div 
-                  className="space-y-4" 
-                  role="radiogroup" 
-                  aria-label={quizQuestions[currentQuestion].question}
+                <div
+                  className="space-y-4"
+                  role="radiogroup"
+                  aria-label={questions[currentQuestion].text}
                 >
-                  {quizQuestions[currentQuestion].options.map((option, index) => (
+                  {questions[currentQuestion].options.map((option, index) => (
                     <motion.button
-                      key={index}
+                      key={option.key}
                       type="button"
                       role="radio"
-                      aria-checked={selectedAnswer === index}
-                      tabIndex={selectedAnswer === index ? 0 : -1}
+                      aria-checked={selectedAnswer === option.key}
+                      tabIndex={selectedAnswer === option.key ? 0 : -1}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => handleAnswerSelect(index)}
+                      onClick={() => handleAnswerSelect(option.key)}
                       onKeyDown={(e) => {
                         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
                           e.preventDefault()
-                          const nextIndex = (index + 1) % quizQuestions[currentQuestion].options.length
-                          handleAnswerSelect(nextIndex)
+                          const nextIndex = (index + 1) % questions[currentQuestion].options.length
+                          handleAnswerSelect(questions[currentQuestion].options[nextIndex].key)
                         } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
                           e.preventDefault()
-                          const prevIndex = index === 0 ? quizQuestions[currentQuestion].options.length - 1 : index - 1
-                          handleAnswerSelect(prevIndex)
+                          const prevIndex = index === 0 ? questions[currentQuestion].options.length - 1 : index - 1
+                          handleAnswerSelect(questions[currentQuestion].options[prevIndex].key)
                         } else if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault()
-                          handleAnswerSelect(index)
+                          handleAnswerSelect(option.key)
                         }
                       }}
                       className={cn(
                         "w-full text-left p-6 rounded-xl border-2 transition-all",
                         "hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-                        selectedAnswer === index
+                        selectedAnswer === option.key
                           ? "border-primary bg-primary/10 shadow-lg"
                           : "border-border glass"
                       )}
@@ -349,11 +301,11 @@ export default function AssessmentPage() {
                       <div className="flex items-center gap-4">
                         <div className={cn(
                           "h-6 w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0",
-                          selectedAnswer === index
+                          selectedAnswer === option.key
                             ? "border-primary bg-primary"
                             : "border-muted-foreground"
                         )} aria-hidden="true">
-                          {selectedAnswer === index && (
+                          {selectedAnswer === option.key && (
                             <motion.div
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
@@ -361,7 +313,7 @@ export default function AssessmentPage() {
                             />
                           )}
                         </div>
-                        <span className="text-lg">{option}</span>
+                        <span className="text-lg">{option.value}</span>
                       </div>
                     </motion.button>
                   ))}
