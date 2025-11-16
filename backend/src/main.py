@@ -4,6 +4,7 @@ from .api.company import populate_company
 from .api.insights import handle_insights
 from .api.learn import handle_learn
 from .api.assessment import handle_assessment
+from .api.market_ticker import handle_market_ticker, get_cache_status
 from .config import PORT
 
 class Handler(BaseHTTPRequestHandler):
@@ -26,6 +27,25 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        # Market ticker endpoint
+        if self.path == "/market-ticker":
+            try:
+                ticker_data = handle_market_ticker()
+                self._json_response(200, ticker_data)
+            except Exception as e:
+                self._json_response(500, {"error": str(e)})
+            return
+
+        # Cache status debug endpoint
+        if self.path == "/market-ticker/cache-status":
+            try:
+                status = get_cache_status()
+                self._json_response(200, status)
+            except Exception as e:
+                self._json_response(500, {"error": str(e)})
+            return
+
+        # Company data endpoint
         if self.path.startswith("/company/"):
             ticker = self.path.split("/company/")[-1].strip().upper()
             try:
@@ -34,6 +54,7 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as e:
                 self._json_response(500, {"error": str(e)})
             return
+
         self._json_response(404, {"error": "Not Found"})
 
     def do_POST(self):
