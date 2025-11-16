@@ -1,14 +1,12 @@
 name = "investiq-api"
 compatibility_date = "2024-01-01"
+account_id = "8fbe13dc4c1d3112f8b00f01e1eaa6d4"
 
 # D1 Database Binding
 [[d1_databases]]
 binding = "DB"
 database_name = "investiq"
 database_id = "fdb7c213-b732-4155-88c6-000900224c56"
-
-# Account ID
-account_id = "8fbe13dc4c1d3112f8b00f01e1eaa6d4"
 
 # Workers AI Binding (for Cloudflare AI prize!)
 [ai]
